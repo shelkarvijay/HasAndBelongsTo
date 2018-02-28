@@ -1,0 +1,91 @@
+  [1m[35m (118.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (118.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4374988653953796795)[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateProgrammers (20180228080938)
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (100.0ms)[0m  [1m[35mCREATE TABLE "programmers" ("id" bigserial primary key, "name" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[35mSQL (0.8ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20180228080938"]]
+  [1m[35m (23.5ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateClients (20180228080955)
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (100.9ms)[0m  [1m[35mCREATE TABLE "clients" ("id" bigserial primary key, "name" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[35mSQL (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20180228080955"]]
+  [1m[35m (27.2ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateClientsProgrammers (20180228081006)
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (58.9ms)[0m  [1m[35mCREATE TABLE "clients_programmers" ("id" bigserial primary key, "programmer_id" bigint, "client_id" bigint, CONSTRAINT "fk_rails_b3c84f98b5"
+FOREIGN KEY ("programmer_id")
+  REFERENCES "programmers" ("id")
+, CONSTRAINT "fk_rails_efc56c8bd6"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+)[0m
+  [1m[35m (39.8ms)[0m  [1m[35mCREATE  INDEX  "index_clients_programmers_on_programmer_id" ON "clients_programmers"  ("programmer_id")[0m
+  [1m[35m (41.9ms)[0m  [1m[35mCREATE  INDEX  "index_clients_programmers_on_client_id" ON "clients_programmers"  ("client_id")[0m
+  [1m[35mSQL (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20180228081006"]]
+  [1m[35m (25.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.6ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.8ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2018-02-28 08:10:20.470869"], ["updated_at", "2018-02-28 08:10:20.470869"]]
+  [1m[35m (5.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_advisory_unlock(4374988653953796795)[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (1.8ms)[0m  [1m[32mINSERT INTO "programmers" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "Josh Frankel"], ["created_at", "2018-02-28 08:12:01.562359"], ["updated_at", "2018-02-28 08:12:01.562359"]]
+  [1m[35m (69.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (1.1ms)[0m  [1m[32mINSERT INTO "clients" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "Mr. Nic Cage"], ["created_at", "2018-02-28 08:13:24.878139"], ["updated_at", "2018-02-28 08:13:24.878139"]]
+  [1m[35mSQL (1.8ms)[0m  [1m[32mINSERT INTO "clients_programmers" ("programmer_id", "client_id") VALUES ($1, $2) RETURNING "id"[0m  [["programmer_id", 1], ["client_id", 1]]
+  [1m[35m (25.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mClient Load (0.7ms)[0m  [1m[34mSELECT  "clients".* FROM "clients" INNER JOIN "clients_programmers" ON "clients"."id" = "clients_programmers"."client_id" WHERE "clients_programmers"."programmer_id" = $1 LIMIT $2[0m  [["programmer_id", 1], ["LIMIT", 11]]
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.8ms)[0m  [1m[32mINSERT INTO "clients" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "Soma"], ["created_at", "2018-02-28 08:14:51.285337"], ["updated_at", "2018-02-28 08:14:51.285337"]]
+  [1m[35mSQL (0.8ms)[0m  [1m[32mINSERT INTO "clients_programmers" ("programmer_id", "client_id") VALUES ($1, $2) RETURNING "id"[0m  [["programmer_id", 1], ["client_id", 2]]
+  [1m[35m (21.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "programmers" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "Raju"], ["created_at", "2018-02-28 08:15:25.786966"], ["updated_at", "2018-02-28 08:15:25.786966"]]
+  [1m[35m (23.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.7ms)[0m  [1m[32mINSERT INTO "clients" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "Soma"], ["created_at", "2018-02-28 08:16:08.270373"], ["updated_at", "2018-02-28 08:16:08.270373"]]
+  [1m[35mSQL (1.1ms)[0m  [1m[32mINSERT INTO "clients_programmers" ("programmer_id", "client_id") VALUES ($1, $2) RETURNING "id"[0m  [["programmer_id", 2], ["client_id", 3]]
+  [1m[35m (26.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (1.1ms)[0m  [1m[32mINSERT INTO "clients" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "Soma"], ["created_at", "2018-02-28 08:17:53.929437"], ["updated_at", "2018-02-28 08:17:53.929437"]]
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "clients_programmers" ("programmer_id", "client_id") VALUES ($1, $2) RETURNING "id"[0m  [["programmer_id", 2], ["client_id", 4]]
+  [1m[35m (25.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (0.8ms)[0m  [1m[32mINSERT INTO "programmers" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "Viju"], ["created_at", "2018-02-28 08:18:40.294471"], ["updated_at", "2018-02-28 08:18:40.294471"]]
+  [1m[35m (18.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "clients" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "Vitthaji"], ["created_at", "2018-02-28 08:19:06.083598"], ["updated_at", "2018-02-28 08:19:06.083598"]]
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "clients_programmers" ("programmer_id", "client_id") VALUES ($1, $2) RETURNING "id"[0m  [["programmer_id", 3], ["client_id", 5]]
+  [1m[35m (20.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (50.9ms)[0m  [1m[32mINSERT INTO "programmers" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "Divine"], ["created_at", "2018-02-28 11:00:54.135465"], ["updated_at", "2018-02-28 11:00:54.135465"]]
+  [1m[35m (25.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (38.8ms)[0m  [1m[32mINSERT INTO "clients" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "Shankar sir"], ["created_at", "2018-02-28 11:01:44.564904"], ["updated_at", "2018-02-28 11:01:44.564904"]]
+  [1m[35mSQL (31.3ms)[0m  [1m[32mINSERT INTO "clients_programmers" ("programmer_id", "client_id") VALUES ($1, $2) RETURNING "id"[0m  [["programmer_id", 4], ["client_id", 6]]
+  [1m[35m (13.9ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (17.4ms)[0m  [1m[32mINSERT INTO "programmers" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "Divine7676"], ["created_at", "2018-02-28 11:14:57.185277"], ["updated_at", "2018-02-28 11:14:57.185277"]]
+  [1m[35m (41.9ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (1.7ms)[0m  [1m[32mINSERT INTO "clients" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "Frankel"], ["created_at", "2018-02-28 11:16:07.752437"], ["updated_at", "2018-02-28 11:16:07.752437"]]
+  [1m[35m (21.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (1.3ms)[0m  [1m[32mINSERT INTO "clients" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "ballal"], ["created_at", "2018-02-28 11:17:33.043484"], ["updated_at", "2018-02-28 11:17:33.043484"]]
+  [1m[35mSQL (1.7ms)[0m  [1m[32mINSERT INTO "clients_programmers" ("programmer_id", "client_id") VALUES ($1, $2) RETURNING "id"[0m  [["programmer_id", 5], ["client_id", 8]]
+  [1m[35m (24.0ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (1.2ms)[0m  [1m[32mINSERT INTO "programmers" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "ballal"], ["created_at", "2018-02-28 11:19:59.550637"], ["updated_at", "2018-02-28 11:19:59.550637"]]
+  [1m[35mSQL (1.9ms)[0m  [1m[32mINSERT INTO "clients_programmers" ("programmer_id", "client_id") VALUES ($1, $2) RETURNING "id"[0m  [["programmer_id", 6], ["client_id", 7]]
+  [1m[35m (44.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (1.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (1.5ms)[0m  [1m[32mINSERT INTO "programmers" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "76jgj76"], ["created_at", "2018-02-28 11:21:32.420332"], ["updated_at", "2018-02-28 11:21:32.420332"]]
+  [1m[35m (13.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+  [1m[35mSQL (1.9ms)[0m  [1m[32mINSERT INTO "programmers" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "hgjgballal"], ["created_at", "2018-02-28 11:22:43.127423"], ["updated_at", "2018-02-28 11:22:43.127423"]]
+  [1m[35mSQL (1.9ms)[0m  [1m[32mINSERT INTO "clients_programmers" ("programmer_id", "client_id") VALUES ($1, $2) RETURNING "id"[0m  [["programmer_id", 8], ["client_id", 7]]
+  [1m[35m (28.7ms)[0m  [1m[35mCOMMIT[0m
